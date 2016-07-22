@@ -1,3 +1,5 @@
+![](https://travis-ci.org/cizixs/go-algorithms.svg?branch=master)
+
 # go-algorithms
 Common data structures and algorithms implemented in golang.
 
