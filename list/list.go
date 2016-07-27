@@ -1,17 +1,20 @@
 /* List is a simple yet often used data structure.
 
 l := list.New()   // create a new empty list
-l.Append(1, 2, 3) // append one or multiple value to list
+l.PushBack(1, 2, 3) // append one or multiple value to list
 l.Length()           // return the length of list
 l.Index(index)    // get the value at index
 l.Find(value)     // get the index of the first appearence of value
-l.Remove(value)   // remove the first appearence of value
-l.InsertBefore(value, mark)  // insert a value after mark
-l.InsertAfter(value, mark)  // insert a value before mark
-l.pop()          // return the value in a list
+l.Lpop()          // remove and return the first value in a list
+l.Rpop()          // remove and return the last value in a list
 */
 
 package list
+
+import (
+	"errors"
+	"fmt"
+)
 
 type Node struct {
 	Value      interface{} // List can store any type of value
@@ -20,9 +23,8 @@ type Node struct {
 
 // List represent a serial of values in sequence
 type List struct {
-	head   *Node // head point to the the first node.
-	tail   *Node // tail points to the last node
-	length int   // how many nodea are in the list
+	root   Node // sentinal node
+	length int  // how many nodea are in the list
 }
 
 // Return a new empty list
@@ -31,15 +33,15 @@ func New() *List {
 	l.length = 0
 
 	// create a sentinal node, makes it easy to deal with empty list
-	n := &Node{}
-	l.head = n
-	l.tail = n
+	l.root.next = &l.root
+	l.root.prev = &l.root
+
 	return l
 }
 
 // Check whether the list is empty
 func (l *List) IsEmpty() bool {
-	return l.head.next == nil
+	return l.root.next == &l.root
 }
 
 // Return how many nodes are in the list
@@ -47,27 +49,26 @@ func (l *List) Length() int {
 	return l.length
 }
 
-// FIXME(cizixs): What is element is not comparable
-func (l *List) Contains(element interface{}) bool {
-	p := l.head.next
-	for p != nil {
-		if p.Value == element {
-			return true
-		} else {
-			p = p.next
-		}
-	}
-	return false
-}
-
-// Append a value at the end
-func (l *List) Append(elements ...interface{}) {
+// Add values at the front
+func (l *List) PushFront(elements ...interface{}) {
 	for _, element := range elements {
 		n := &Node{Value: element}
-		n.next = nil
-		n.prev = l.tail
-		l.tail.next = n
-		l.tail = n
+		n.next = l.root.next
+		n.prev = &l.root
+		l.root.next.prev = n
+		l.root.next = n
+		l.length++
+	}
+}
+
+// Append values at the end
+func (l *List) PushBack(elements ...interface{}) {
+	for _, element := range elements {
+		n := &Node{Value: element}
+		n.next = &l.root     // since n is the last element, its next should be the head
+		n.prev = l.root.prev // n's prev should be the tail
+		l.root.prev.next = n // tail's next should be n
+		l.root.prev = n      // head's prev should be n
 		l.length++
 	}
 }
@@ -75,15 +76,107 @@ func (l *List) Append(elements ...interface{}) {
 // Find the element in list, return the index if found, otherwise return -1
 func (l *List) Find(element interface{}) int {
 	index := 0
-	p := l.head.next
-	for p != nil && p.Value != element {
+	p := l.root.next
+	for p != &l.root && p.Value != element {
 		p = p.next
 		index++
 	}
 
-	if p != nil {
+	if p != &l.root {
 		return index
 	}
 
 	return -1
+}
+
+func (l *List) indexFrontwise(index int) *Node {
+	pos := 0
+	p := l.root.next
+
+	for p != &l.root && pos < index {
+		p = p.next
+		pos++
+	}
+
+	if p == &l.root {
+		return nil
+	} else {
+		return p
+	}
+}
+
+func (l *List) indexBackwise(index int) *Node {
+	pos := 1
+	p := l.root.prev
+
+	for p != &l.root && pos < index {
+		p = p.prev
+		pos++
+	}
+
+	if p == &l.root {
+		return nil
+	} else {
+		return p
+	}
+}
+
+func (l *List) index(index int) *Node {
+	var n *Node
+	if index >= 0 {
+		n = l.indexFrontwise(index)
+	} else {
+		n = l.indexBackwise(-index)
+	}
+	return n
+}
+
+// Return the element at index, if element is not valid, return error
+// Support negative index, like -1, -2 etc, it will count backwise though.
+func (l *List) Index(index int) (interface{}, error) {
+	n := l.index(index)
+	if n == nil {
+		return nil, errors.New(fmt.Sprintf("Index %d is not valid.", index))
+	}
+	return n.Value, nil
+}
+
+// remove element in list
+func (l *List) remove(n *Node) {
+	n.prev.next = n.next
+	n.next.prev = n.prev
+	n.next = nil
+	n.prev = nil
+	l.length--
+}
+
+// Remove and get the first element in the list
+// or nil if the
+func (l *List) Lpop() interface{} {
+	if l.length == 0 {
+		return nil
+	}
+
+	n := l.root.next
+	l.remove(n)
+	return n.Value
+}
+
+// Remove and get the last element in the list
+func (l *List) Rpop() interface{} {
+	if l.length == 0 {
+		return nil
+	}
+
+	n := l.root.prev
+	l.remove(n)
+	return n.Value
+}
+
+// Return a slice containing elements in range
+// end can be negative, like -1, -2 etc
+// if *start* is large than *end*, return empty slice `[]'
+// if the end is large than the actual end, it will be treated like the last element
+func (l *List) Range(start, end int) []interface{} {
+	return []interface{}{}
 }
