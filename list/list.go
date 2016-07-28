@@ -12,10 +12,10 @@ l.Rpop()          // remove and return the last value in a list
 package list
 
 import (
-	"errors"
 	"fmt"
 )
 
+// Node represents a single element in list
 type Node struct {
 	Value      interface{} // List can store any type of value
 	next, prev *Node       // double linked list
@@ -27,7 +27,7 @@ type List struct {
 	length int  // how many nodea are in the list
 }
 
-// Return a new empty list
+// New creates and returns a new empty list
 func New() *List {
 	l := &List{}
 	l.length = 0
@@ -39,17 +39,17 @@ func New() *List {
 	return l
 }
 
-// Check whether the list is empty
+// IsEmpty checks whether the list is empty
 func (l *List) IsEmpty() bool {
 	return l.root.next == &l.root
 }
 
-// Return how many nodes are in the list
+// Length returns how many nodes are in the list
 func (l *List) Length() int {
 	return l.length
 }
 
-// Add values at the front
+// PushFront adds values at the front
 func (l *List) PushFront(elements ...interface{}) {
 	for _, element := range elements {
 		n := &Node{Value: element}
@@ -61,7 +61,7 @@ func (l *List) PushFront(elements ...interface{}) {
 	}
 }
 
-// Append values at the end
+// PushBack appends values at the end
 func (l *List) PushBack(elements ...interface{}) {
 	for _, element := range elements {
 		n := &Node{Value: element}
@@ -100,9 +100,8 @@ func (l *List) indexFrontwise(index int) *Node {
 
 	if p == &l.root {
 		return nil
-	} else {
-		return p
 	}
+	return p
 }
 
 func (l *List) indexBackwise(index int) *Node {
@@ -116,9 +115,8 @@ func (l *List) indexBackwise(index int) *Node {
 
 	if p == &l.root {
 		return nil
-	} else {
-		return p
 	}
+	return p
 }
 
 func (l *List) index(index int) *Node {
@@ -131,12 +129,12 @@ func (l *List) index(index int) *Node {
 	return n
 }
 
-// Return the element at index, if element is not valid, return error
+// Index returns the element at index, if element is not valid, return error
 // Support negative index, like -1, -2 etc, it will count backwise though.
 func (l *List) Index(index int) (interface{}, error) {
 	n := l.index(index)
 	if n == nil {
-		return nil, errors.New(fmt.Sprintf("Index %d is not valid.", index))
+		return nil, fmt.Errorf("Index %d is not valid.", index)
 	}
 	return n.Value, nil
 }
@@ -150,7 +148,7 @@ func (l *List) remove(n *Node) {
 	l.length--
 }
 
-// Remove and get the first element in the list
+// Lpop removes and get the first element in the list
 // or nil if the
 func (l *List) Lpop() interface{} {
 	if l.length == 0 {
@@ -162,7 +160,7 @@ func (l *List) Lpop() interface{} {
 	return n.Value
 }
 
-// Remove and get the last element in the list
+// Rpop removes and get the last element in the list
 func (l *List) Rpop() interface{} {
 	if l.length == 0 {
 		return nil
@@ -187,7 +185,7 @@ func (l *List) normalIndex(index int) int {
 	return index
 }
 
-// Return a slice containing elements in range
+// Range returns a slice containing elements in range
 // end can be negative, like -1, -2 etc
 // if *start* is large than *end*, return empty slice `[]'
 // if the end is large than the actual end, it will be treated like the last element
