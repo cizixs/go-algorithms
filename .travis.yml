@@ -7,6 +7,8 @@ go:
 install:
   - go get github.com/stretchr/testify/
   - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
 
 script:
-    go test -v -covermode=count -coverprofile=coverage.out
+  - PATH="$HOME/gopath/bin:$PATH"
+  - script/coverage --coveralls
