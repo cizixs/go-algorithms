@@ -39,15 +39,15 @@ func testPop(t *testing.T) {
 		s.Push(element)
 	}
 
-	for i, _ := range data {
+	for i := range data {
 		element, _ := s.Pop()
 		assert.Equal(element, data[2-i], "Expect %v, got %v", data[2-i], element)
 	}
 
 	// pop from the empty stack
-	_, err := s.Pop()
+	res, err := s.Pop()
+	assert.Nil(res, "Pop from an empty stack should return nil")
 	assert.Error(err, "Pop from an empty stack expects an error, got nil")
-
 }
 
 func TestIsEmpty(t *testing.T) {
@@ -61,5 +61,4 @@ func TestIsEmpty(t *testing.T) {
 
 	s.Pop()
 	assert.True(s.IsEmpty(), "New stack should be empty")
-
 }

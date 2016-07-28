@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// Node represents a tree node
 // TODO: add support for any type, not just int
 type Node struct {
 	value       int   // Value the node stores
@@ -31,6 +32,7 @@ func (n *Node) Insert(newNode *Node) {
 	}
 }
 
+// FindMin return the smallest element in tree
 func (n *Node) FindMin() (int, error) {
 	if n == nil {
 		return 0, errors.New("Empty tree has no Min element.")
@@ -41,6 +43,7 @@ func (n *Node) FindMin() (int, error) {
 	return n.value, nil
 }
 
+// FindMax returns the biggest element in tree
 func (n *Node) FindMax() (int, error) {
 	if n == nil {
 		return 0, errors.New("Empty tree has no Max element.")
@@ -51,6 +54,7 @@ func (n *Node) FindMax() (int, error) {
 	return n.value, nil
 }
 
+// Delete removes a given element
 func (n *Node) Delete(element int) (*Node, bool) {
 	deleted := false
 
@@ -92,18 +96,18 @@ func (n *Node) Walk(f func(int)) {
 
 // BinarySearchTree store a root and the tree node numbers.
 type BinarySearchTree struct {
-	root      *Node // pointer to root of the tree
-	nodes_num int   // nodes number: how many nodes are in the tree
+	root    *Node // pointer to root of the tree
+	nodeNum int   // nodes number: how many nodes are in the tree
 }
 
-// Return an initial new tree
+// New returns an initial new tree
 func New() *BinarySearchTree {
 	return &BinarySearchTree{}
 }
 
-// Return how many nodes are in the tree
+// Nodes returns how many nodes are in the tree
 func (b *BinarySearchTree) Nodes() int {
-	return b.nodes_num
+	return b.nodeNum
 }
 
 // Insert an element into the tree
@@ -115,15 +119,15 @@ func (b *BinarySearchTree) Insert(element int) {
 	} else {
 		b.root.Insert(&node)
 	}
-	b.nodes_num += 1
+	b.nodeNum++
 }
 
-// Calls `f` on every node
+// Walk calls `f` on every node
 func (b *BinarySearchTree) Walk(f func(int)) {
 	b.root.Walk(f)
 }
 
-// Check if an element exists in a tree
+// Contains checks if an element exists in a tree
 func (b *BinarySearchTree) Contains(element int) bool {
 	n := b.root
 	for n != nil {
@@ -141,9 +145,9 @@ func (b *BinarySearchTree) Contains(element int) bool {
 	return false
 }
 
-// Return if the tree is an empty tree
+// IsEmpty returns if the tree is an empty tree
 func (b *BinarySearchTree) IsEmpty() bool {
-	return b.nodes_num == 0
+	return b.nodeNum == 0
 }
 
 // Find and return a pointer to the node whose value equals to `element`
@@ -165,12 +169,12 @@ func (b *BinarySearchTree) Find(element int) *Node {
 	return nil
 }
 
-// Find and return the smallest element in tree
+// FindMin returns the smallest element in tree
 func (b *BinarySearchTree) FindMin() (int, error) {
 	return b.root.FindMin()
 }
 
-// Find and return the biggest element in tree
+// FindMax returns the biggest element in tree
 func (b *BinarySearchTree) FindMax() (int, error) {
 	return b.root.FindMax()
 }
@@ -185,6 +189,6 @@ func (b *BinarySearchTree) Delete(element int) {
 	n, deleted := b.root.Delete(element)
 	b.root = n
 	if deleted {
-		b.nodes_num--
+		b.nodeNum--
 	}
 }
