@@ -119,3 +119,19 @@ func TestRpop(t *testing.T) {
 
 	assert.Nil(l.Rpop(), "Rpop from en empty list should return nil")
 }
+
+func TestRange(t *testing.T) {
+	assert := assert.New(t)
+	l := list.New()
+
+	// Test append multi elements
+	data := []interface{}{3, 4, 5, 6}
+	l.PushBack(data...)
+	assert.Equal([]interface{}{3}, l.Range(0, 0), "In range [0,0] value should be 3")
+	assert.Equal([]interface{}{3, 4, 5, 6}, l.Range(0, -1), "Values in range [0, -1] should return all values")
+	assert.Equal([]interface{}{3, 4}, l.Range(0, 1), "Values in range [0, 1] should return the first two values")
+	assert.Equal([]interface{}{}, l.Range(3, 1), "Values in range [3, 1] should return empty slice")
+	assert.Equal([]interface{}{}, l.Range(3, -2), "Values in range [3, -2] should return empty slice")
+	assert.Equal([]interface{}{6}, l.Range(3, 3), "Values in range [3, 3] should return [6]")
+	assert.Equal([]interface{}{4, 5, 6}, l.Range(-3, -1), "Values in range [-3, -3] should return [4, 5, 6]")
+}

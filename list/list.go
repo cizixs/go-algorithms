@@ -173,10 +173,39 @@ func (l *List) Rpop() interface{} {
 	return n.Value
 }
 
+// Given a index of list, return the normal index between 0 and len-1
+func (l *List) normalIndex(index int) int {
+	if index > l.length-1 {
+		index = l.length - 1
+	}
+
+	if index < -l.length {
+		index = 0
+	}
+
+	index = (l.length + index) % l.length
+	return index
+}
+
 // Return a slice containing elements in range
 // end can be negative, like -1, -2 etc
 // if *start* is large than *end*, return empty slice `[]'
 // if the end is large than the actual end, it will be treated like the last element
 func (l *List) Range(start, end int) []interface{} {
-	return []interface{}{}
+	// When start or end exceeds list length
+	start = l.normalIndex(start)
+	end = l.normalIndex(end)
+	res := []interface{}{}
+	if start > end {
+		return res
+	}
+
+	sNode := l.index(start)
+	eNode := l.index(end)
+	for n := sNode; n != eNode; {
+		res = append(res, n.Value)
+		n = n.next
+	}
+	res = append(res, eNode.Value)
+	return res
 }
