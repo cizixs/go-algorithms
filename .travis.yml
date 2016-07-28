@@ -1,14 +1,14 @@
 language: go
-
 go:
-  - 1.6
-  - tip
-
+- 1.6
+- tip
 install:
-  - go get github.com/stretchr/testify/
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-
+- go get github.com/stretchr/testify/
+- go get golang.org/x/tools/cmd/cover
+- go get github.com/mattn/goveralls
 script:
-  - PATH="$HOME/gopath/bin:$PATH"
-  - script/coverage --coveralls
+- PATH="$HOME/gopath/bin:$PATH"
+- script/coverage --coveralls
+env:
+  global:
+    secure: czE/3owU6d2VfpxqAEmQFTDAkQ66TpAZx8gZ3VdPOReE40N0tXWHjBHdcW0iXxUbtvaAECfM626xLegUlPWPdByMgBLd5scE7HwWyFKJ9whEvAqSiHsYqiR5LDKcJxHdwMJ7GSb4hyuP0gwlb+mHL7a1miqlfY/txBi5tSOXIZI9hcpuBedxeOtzEYY3YL0KE1UMfC79MM6nKsx6dFJGmgyGVDMo4qa1KoYRMwtKOb70g1Q/hWUOyAO4QDgLnB5HqurjAcFQ74jy0REt+CKAkmfbCDbCbvGHXfZobAHD62xnbkVA1B3OVbQQNUk3Foy30iw9RGgQZ97U/6wZqy1HuZuSKYOtfpaZPjuv+uckP7UL9Trv4ENL6Lfaw0BEdoTQLhRaLU/FDozSb9e01vbbfbhlvDkrPmn4yA4RByZO2ISyYQiuTV4GrLKrv10CM+eGOrJPLUj0pfmYVKxopQI6wQ0DGzQqtDTqt6jTVV4pKGFpRxKz2JzVZ8SerJdj8ZWCV7yBCs+hhwwoL15kJCbZ/9dg7yRHKXuDrO0UUkhUy1JPrJ5QvlZF6sF2JfdJwELQpiMGGFAM/SF8szq45cT6fOWbmG4IHr7vNwW2PopKaozbVnZx2TbJtDW7qICe6AJpxOAgyYVxpHpuREFxyz8MY1Q2m1XOrh5fjAvh1zc125E=
