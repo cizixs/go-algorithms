@@ -7,14 +7,14 @@ import (
 // Node represents a tree node
 // TODO: add support for any type, not just int
 type Node struct {
-	value       int   // Value the node stores
+	Value       int   // Value the node stores
 	left, right *Node // pointers to the left and right children of the key
 }
 
 // Insert will add a new node to the tree whose root is Node
 func (n *Node) Insert(newNode *Node) {
 	// New node goes to the right part
-	if n.value < newNode.value {
+	if n.Value < newNode.Value {
 		if n.right == nil {
 			n.right = newNode
 		} else {
@@ -23,7 +23,7 @@ func (n *Node) Insert(newNode *Node) {
 	}
 
 	// New node goes to the left part
-	if n.value > newNode.value {
+	if n.Value > newNode.Value {
 		if n.left == nil {
 			n.left = newNode
 		} else {
@@ -40,7 +40,7 @@ func (n *Node) FindMin() (int, error) {
 	for n.left != nil {
 		n = n.left
 	}
-	return n.value, nil
+	return n.Value, nil
 }
 
 // FindMax returns the biggest element in tree
@@ -51,7 +51,7 @@ func (n *Node) FindMax() (int, error) {
 	for n.right != nil {
 		n = n.right
 	}
-	return n.value, nil
+	return n.Value, nil
 }
 
 // Delete removes a given element
@@ -62,13 +62,13 @@ func (n *Node) Delete(element int) (*Node, bool) {
 		return n, false
 	}
 
-	if n.value < element {
+	if n.Value < element {
 		n.right, deleted = n.right.Delete(element)
-	} else if n.value > element {
+	} else if n.Value > element {
 		n.left, deleted = n.left.Delete(element)
 	} else if n.left != nil && n.right != nil {
 		candidate, _ := n.right.FindMin()
-		n.value = candidate
+		n.Value = candidate
 		n.right, deleted = n.right.Delete(candidate)
 		deleted = true
 	} else {
@@ -83,14 +83,14 @@ func (n *Node) Delete(element int) (*Node, bool) {
 }
 
 // Walk function calls `f` on every node value
-// FIXME: Which is a better as parameter of `f`, `Node` or `node.value`?
+// FIXME: Which is a better as parameter of `f`, `Node` or `node.Value`?
 func (n *Node) Walk(f func(int)) {
 	if n == nil {
 		return
 	}
 
 	n.left.Walk(f)
-	f(n.value)
+	f(n.Value)
 	n.right.Walk(f)
 }
 
@@ -112,7 +112,7 @@ func (b *BinarySearchTree) Nodes() int {
 
 // Insert an element into the tree
 func (b *BinarySearchTree) Insert(element int) {
-	node := Node{value: element}
+	node := Node{Value: element}
 
 	if b.root == nil {
 		b.root = &node
@@ -131,11 +131,11 @@ func (b *BinarySearchTree) Walk(f func(int)) {
 func (b *BinarySearchTree) Contains(element int) bool {
 	n := b.root
 	for n != nil {
-		if n.value == element {
+		if n.Value == element {
 			return true
 		}
 
-		if n.value < element {
+		if n.Value < element {
 			n = n.right
 		} else {
 			n = n.left
@@ -155,11 +155,11 @@ func (b *BinarySearchTree) Find(element int) *Node {
 	n := b.root
 
 	for n != nil {
-		if n.value == element {
+		if n.Value == element {
 			return n
 		}
 
-		if n.value < element {
+		if n.Value < element {
 			n = n.right
 		} else {
 			n = n.left

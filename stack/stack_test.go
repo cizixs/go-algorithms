@@ -43,6 +43,7 @@ func testPop(t *testing.T) {
 		element, _ := s.Pop()
 		assert.Equal(element, data[2-i], "Expect %v, got %v", data[2-i], element)
 	}
+	assert.True(s.IsEmpty(), "Pop all elements should get an empty stack")
 
 	// pop from the empty stack
 	res, err := s.Pop()

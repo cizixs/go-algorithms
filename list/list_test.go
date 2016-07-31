@@ -66,6 +66,8 @@ func TestFind(t *testing.T) {
 	for index, elem := range data {
 		assert.Equal(l.Find(elem), index, fmt.Sprintf("%d should be at %d.", elem, index))
 	}
+
+	assert.Equal(l.Find(100), -1, "Find a non-exist element in list should return -1")
 }
 
 func TestIndex(t *testing.T) {
@@ -82,6 +84,9 @@ func TestIndex(t *testing.T) {
 		res, err := l.Index(i)
 		assert.NoError(err, "List should return value at index %d", i)
 		assert.Equal(res, elem, fmt.Sprintf("List should have %v at %d.", elem, i))
+
+		res, _ = l.Index(i - 4)
+		assert.Equal(res, elem, fmt.Sprintf("List should have %v at %d.", elem, i-4))
 	}
 
 	_, err := l.Index(10)
@@ -129,6 +134,8 @@ func TestRange(t *testing.T) {
 	l.PushBack(data...)
 	assert.Equal([]interface{}{3}, l.Range(0, 0), "In range [0,0] value should be 3")
 	assert.Equal([]interface{}{3, 4, 5, 6}, l.Range(0, -1), "Values in range [0, -1] should return all values")
+	assert.Equal([]interface{}{3, 4, 5, 6}, l.Range(0, 10), "Values in range [0, 10] should return all values")
+	assert.Equal([]interface{}{3}, l.Range(0, -10), "Values in range [0, -10] should return the fisrt element")
 	assert.Equal([]interface{}{3, 4}, l.Range(0, 1), "Values in range [0, 1] should return the first two values")
 	assert.Equal([]interface{}{}, l.Range(3, 1), "Values in range [3, 1] should return empty slice")
 	assert.Equal([]interface{}{}, l.Range(3, -2), "Values in range [3, -2] should return empty slice")

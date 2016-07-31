@@ -109,7 +109,37 @@ func TestDeleteTwoChildNode(t *testing.T) {
 		b.Insert(element)
 	}
 
-	b.Delete(40)
+	b.Delete(37)
 	assert.Equal(b.Nodes(), 6, "After deleting, tree should have 5 nodes, got %d", b.Nodes())
-	assert.False(b.Contains(40), "Delete 37 does not work.")
+	assert.False(b.Contains(37), "Delete 37 should remove the element from tree.")
+}
+
+func TestFind(t *testing.T) {
+	assert := assert.New(t)
+
+	b := binarysearchtree.New()
+	data := []int{56, 37, 89, 2, 10, 72}
+	for _, element := range data {
+		b.Insert(element)
+	}
+
+	assert.Equal(b.Find(56).Value, 56, "Find 56 should return a node contains the element")
+	assert.Nil(b.Find(9999), "Find a non-exist element should return nil")
+}
+
+func TestWalk(t *testing.T) {
+	assert := assert.New(t)
+
+	b := binarysearchtree.New()
+	data := []int{56, 37, 89, 2, 10, 72}
+	for _, element := range data {
+		b.Insert(element)
+	}
+
+	var items = []int{}
+	b.Walk(func(item int) {
+		items = append(items, item)
+	})
+
+	assert.Equal([]int{2, 10, 37, 56, 72, 89}, items, "walk a tree shold give the exact elements as inserted.")
 }
