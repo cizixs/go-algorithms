@@ -123,7 +123,9 @@ func TestFind(t *testing.T) {
 		b.Insert(element)
 	}
 
-	assert.Equal(b.Find(56).Value, 56, "Find 56 should return a node contains the element")
+	for _, element := range data {
+		assert.Equal(b.Find(element).Value, element, "Find should return a node contains the element")
+	}
 	assert.Nil(b.Find(9999), "Find a non-exist element should return nil")
 }
 

@@ -74,7 +74,6 @@ func TestIndex(t *testing.T) {
 	assert := assert.New(t)
 	l := list.New()
 
-	// Test append multi elements
 	data := []interface{}{3, 4, 5, 6}
 	l.PushBack(data...)
 	assert.Equal(l.Length(), 4, "After inserting, list should have 4 elements.")
@@ -89,8 +88,13 @@ func TestIndex(t *testing.T) {
 		assert.Equal(res, elem, fmt.Sprintf("List should have %v at %d.", elem, i-4))
 	}
 
-	_, err := l.Index(10)
+	res, err := l.Index(10)
 	assert.Error(err, "Index exceeds list length should return err")
+	assert.Nil(res, "Index exceeds list length should return nil")
+
+	res, err = l.Index(-10)
+	assert.Error(err, "Index exceeds list length should return err")
+	assert.Nil(res, "Index exceeds list length should return nil")
 }
 
 func TestLpop(t *testing.T) {
