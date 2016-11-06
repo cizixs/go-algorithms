@@ -13,10 +13,12 @@ Common data structures and algorithms implemented in golang.
     - [x] List
     - [X] Stack
     - [x] Deque
-    - [X] Binary Tree
+    - [x] Binary Tree
+    - [ ] AVL tree
+    - [ ] B-Trees
     - [ ] Hash
     - [ ] Priority Queue
-    - [ ] Set
+    - [x] Set
     - [ ] Heap
 
 - Algorithms
